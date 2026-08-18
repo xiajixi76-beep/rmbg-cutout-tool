@@ -93,4 +93,13 @@ with gr.Blocks(title="本地抠图工具 · RMBG-2.0") as demo:
                 "本工具基于 BRIA AI 开源模型 RMBG-2.0（非商业使用许可），仅供个人本地使用。")
 
 if __name__ == "__main__":
-    demo.launch(server_name="127.0.0.1", server_port=7861, inbrowser=True, theme=gr.themes.Soft())
+    import os
+    # 云端（Hugging Face Spaces 等）通过环境变量注入端口；本机默认 7861
+    port = int(os.environ.get("PORT", os.environ.get("SPACE_PORT", 7861)))
+    on_space = "SPACE_ID" in os.environ
+    demo.launch(
+        server_name="0.0.0.0",
+        server_port=port,
+        inbrowser=not on_space,
+        theme=gr.themes.Soft(),
+    )

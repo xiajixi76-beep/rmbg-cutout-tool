@@ -94,12 +94,13 @@ with gr.Blocks(title="本地抠图工具 · RMBG-2.0") as demo:
 
 if __name__ == "__main__":
     import os
-    # 云端（Hugging Face Spaces 等）通过环境变量注入端口；本机默认 7861
-    port = int(os.environ.get("PORT", os.environ.get("SPACE_PORT", 7861)))
-    on_space = "SPACE_ID" in os.environ
+    # 云端（Hugging Face Spaces / ModelScope 创空间等）通过环境变量注入端口；
+    # 平台不设时回退到 7860（主流平台默认端口），本机用 start.bat 指定 7861
+    port = int(os.environ.get("PORT", os.environ.get("SPACE_PORT", 7860)))
+    is_cloud = ("PORT" in os.environ) or ("SPACE_PORT" in os.environ) or ("SPACE_ID" in os.environ)
     demo.launch(
         server_name="0.0.0.0",
         server_port=port,
-        inbrowser=not on_space,
+        inbrowser=not is_cloud,
         theme=gr.themes.Soft(),
     )
